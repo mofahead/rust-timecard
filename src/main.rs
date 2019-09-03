@@ -157,11 +157,12 @@ fn parse_user_input(input: String) -> Vec<Entry> {
                 match date {
                     Ok(date) => {
                         entries.push(Entry::DateEntry(date));
+                        continue
                     }
                     Err(e) => handle_parse_error(i + 1, line, e),
                 }
             }
-            None => (), // no regex date match
+            None => (), // not date, carry on
         }
 
         // try to match time range w/ regex
@@ -177,11 +178,17 @@ fn parse_user_input(input: String) -> Vec<Entry> {
                 match time_range {
                     Ok(time_range) => {
                         entries.push(Entry::TimeRangeEntry(time_range));
+                        continue
                     }
                     Err(e) => handle_parse_error(i + 1, line, e),
                 };
             }
-            None => (), // no regex time range match
+            None => (), // not time range, carry on
+        }
+
+        match line {
+            "" => (), // blank line, ignore
+            _ => handle_parse_error(i +1, line, "Doesn't look like date or time range".to_string())
         }
     }
 
@@ -228,10 +235,11 @@ fn format_minutes(minutes: u32) -> String {
 }
 
 fn print_div() {
-    println!("{}", "---------------------------------------------------");
+    println!("{}", "-------------------------");
 }
 
 fn handle_parse_error(line_no: usize, line: &str, msg: String) {
-    println!("line {}: \"{}\": {}", line_no, line, msg);
+    print_div();
+    println!("Line {}: \"{}\": {}", line_no, line, msg);
     process::exit(1);
 }
