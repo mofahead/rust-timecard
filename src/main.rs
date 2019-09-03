@@ -29,13 +29,9 @@ struct Date {
 }
 impl Date {
     fn new(month: u32, day: u32) -> Result<Date, String> {
-        if month >= 1 && month <= 12 && day >= 1 && day <= 31 {
-            Ok(Date {
-                month: month,
-                day: day,
-            })
-        } else {
-            Err(format!("invalid date \"{}/{}\"", month, day))
+        match (month, day) {
+            (1..=12, 1..=31) => Ok(Date {month: month, day: day}),
+            (_, _) => Err(format!("invalid date \"{}/{}\"", month, day))
         }
     }
     fn to_s(&self) -> String {
@@ -50,13 +46,9 @@ struct Time {
 }
 impl Time {
     fn new(hours: u32, minutes: u32) -> Result<Time, String> {
-        if 1 <= hours && hours <= 12 && 1 <= minutes && minutes <= 60 {
-            Ok(Time {
-                hours: hours,
-                minutes: minutes,
-            })
-        } else {
-            Err(format!("invalid time \"{}:{}\"", hours, minutes))
+        match (hours, minutes) {
+            (1..=12, 0..=59) => Ok(Time {hours: hours, minutes: minutes}),
+            (_, _) => Err(format!("invalid time \"{}:{}\"", hours, minutes))
         }
     }
     /// Time of day in minutes, 12 hour clock,
@@ -71,9 +63,9 @@ impl Time {
             self.hours * 60 + self.minutes
         }
     }
-    fn to_s(&self) -> String {
-        format!("{}:{}", self.hours, self.minutes)
-    }
+    // fn to_s(&self) -> String {
+    //     format!("{}:{}", self.hours, self.minutes)
+    // }
 }
 
 // TimeRange e.g. 1:15-2:45
@@ -115,9 +107,9 @@ impl TimeRange {
             0
         }
     }
-    fn to_s(&self) -> String {
-        format!("{}-{}", self.start.to_s(), self.end.to_s())
-    }
+    // fn to_s(&self) -> String {
+    //     format!("{}-{}", self.start.to_s(), self.end.to_s())
+    // }
 }
 
 enum Entry {
