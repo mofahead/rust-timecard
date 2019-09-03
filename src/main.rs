@@ -4,6 +4,8 @@
 
 use std::io;
 use std::io::Read;
+use std::fs;
+use std::env;
 use std::process;
 
 use regex::Regex;
@@ -118,8 +120,24 @@ enum Entry {
 }
 
 fn main() {
-    let input: String = get_input_from_user();
-
+    let input: String;
+    let args: Vec<String> = env::args().collect();
+    match args.len() {
+        1 => input = get_input_from_user(),
+        2 => {
+            match fs::read_to_string(&args[1]) {
+                Ok(res) => input = res,
+                Err(e) => {
+                    println!("Couldn't read from file: {}", e);
+                    process::exit(1)
+                }
+            }
+        },
+        _ => {
+            println!("Usage: {} [file]", &args[0]);
+            process::exit(1);
+        }
+    }
     // mock input string
     // let input = "1/3\n\n1:23-1:27\n12/4\n3:45-4:45\n12/15\n12:45-1:15";
 
@@ -131,6 +149,7 @@ fn main() {
     }
     process_entries(entries);
 }
+
 
 fn get_input_from_user() -> String {
     let mut input = String::new();
