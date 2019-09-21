@@ -1,6 +1,6 @@
 Learning some Rust by rewriting my Python timecard script.
 
-Script to calculate total hours on a timecard, pasted into stdin. Returns a nice summary of hours by day, and total hours worked.
+Script to calculate total hours on a timecard (stdin or file if given). Returns a nice summary of hours by day, and total hours worked.
 
 Example timecard format:
 
@@ -29,9 +29,3 @@ Example output:
     ---------------------------------------------------
     Total: 4.58 hrs
     ---------------------------------------------------
-
-
-
-TODO:
-
-- Flag lines with unrecognized format
